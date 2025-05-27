@@ -1,2 +1,5 @@
 # chat_app
-Mern Stack chat App real time working
+Mern Stack Chat App real time working
+
+
+## 
