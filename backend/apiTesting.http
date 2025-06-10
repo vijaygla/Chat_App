@@ -1,0 +1,27 @@
+@userHost = http://localhost:9000/api/v1/user
+
+POST {{userHost}}/register
+Content-Type: application/json
+
+{
+  "fullName": "vijay",
+  "username": "pmdhrs",
+  "password": "123",
+  "confirmPassword": "123",
+  "gender": "male"
+}
+
+###
+
+POST {{userHost}}/login
+Content-Type: application/json
+
+{
+    "username": "pmdhrs",
+    "password": "123"
+}
+
+
+###
+GET {{userHost}}/logout
+
