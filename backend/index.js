@@ -6,6 +6,8 @@ import dotenv from "dotenv";
 import connectDB from "./config/database.js";
 import userRoute from "./routes/userRoute.js";
 import cookieParser from "cookie-parser";
+import messageRoutes from "./routes/messageRoutes.js";
+
 cookieParser;
 
 dotenv.config({});
@@ -19,8 +21,9 @@ app.use(cookieParser());
 
 
 // use of routes
-app.use("/api/v1/user", userRoute);
 // http://localhost:9000/api/v1/user/register
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/message", messageRoutes);
 
 
 app.listen(PORT, () => {

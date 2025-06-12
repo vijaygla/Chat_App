@@ -1,17 +1,33 @@
 @userHost = http://localhost:9000/api/v1/user
+@messageHost = http://localhost:9000/api/v1/message
+
+### user register
 
 POST {{userHost}}/register
 Content-Type: application/json
 
 {
-  "fullName": "vijay",
-  "username": "pmdhrs",
-  "password": "123",
-  "confirmPassword": "123",
-  "gender": "male"
+    "fullName": "vijay",
+    "username": "pmdhrs",
+    "password": "123",
+    "confirmPassword": "123",
+    "gender": "male"
 }
 
 ###
+
+POST {{userHost}}/register
+Content-Type: application/json
+
+{
+    "fullName": "kumar",
+    "username": "kumar",
+    "password": "123",
+    "confirmPassword": "123",
+    "gender": "male"
+}
+
+### user login
 
 POST {{userHost}}/login
 Content-Type: application/json
@@ -21,7 +37,57 @@ Content-Type: application/json
     "password": "123"
 }
 
+###
+
+POST {{userHost}}/login
+Content-Type: application/json
+
+{
+    "username": "vinay",
+    "password": "123"
+}
 
 ###
+
+POST {{userHost}}/login
+Content-Type: application/json
+
+{
+    "username": "kumar",
+    "password": "123"
+}
+
+### user logout
+
 GET {{userHost}}/logout
 
+### `get other user
+
+GET {{userHost}}
+
+----------------------------------------------------------
+
+### send message
+
+POST {{messageHost}}/send/683798f90d94bec52a529e4d
+Content-Type: application/json
+
+{
+    "message": "Hello sir how are you"
+}
+
+###
+
+POST http://localhost:9000/api/v1/message/send/683b2c0c486b6aa6c6ae6c92
+Content-Type: application/json
+
+{
+    "message": "Hello sir, how are you?"
+}
+
+### get message
+
+GET {{messageHost}}/683798f90d94bec52a529e4d
+
+
+###
