@@ -1,55 +1,56 @@
-import { Conversation } from '../models/conversationModel.js';
-import { Message } from '../models/MessageModel.js';
+import { Conversation } from "../models/conversationModel.js";
+import { Message } from "../models/messageModel.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
-export const sendMessage = async(req, res) => {
+export const sendMessage = async (req,res) => {
     try {
         const senderId = req.id;
         const receiverId = req.params.id;
-        const { message } = req.body;
+        const {message} = req.body;
 
         let gotConversation = await Conversation.findOne({
-            participants: {$all : [senderId, receiverId]},
-        })
+            participants:{$all : [senderId, receiverId]},
+        });
 
-        if(!gotConversation) {
+        if(!gotConversation){
             gotConversation = await Conversation.create({
-            participants: [senderId, receiverId]
+                participants:[senderId, receiverId]
             })
-        }
-
+        };
         const newMessage = await Message.create({
             senderId,
             receiverId,
             message
-        })
-
-        if(newMessage) {
+        });
+        if(newMessage){
             gotConversation.messages.push(newMessage._id);
+        };
+        
+
+        await Promise.all([gotConversation.save(), newMessage.save()]);
+         
+        // SOCKET IO
+        const receiverSocketId = getReceiverSocketId(receiverId);
+        if(receiverSocketId){
+            io.to(receiverSocketId).emit("newMessage", newMessage);
         }
-        await gotConversation.save();
-
         return res.status(201).json({
-            message: "message send successfully"
+            newMessage
         })
-
-        // socket io logic for real time chat changes
-
-
     } catch (error) {
         console.log(error);
     }
 }
 
 
-export const getMessage = async(req, res) => {
+export const getMessage = async (req,res) => {
     try {
         const receiverId = req.params.id;
         const senderId = req.id;
         const conversation = await Conversation.findOne({
-            participants: {$all : [senderId, receiverId]}
-        }).populate("messages") // populate is mongo function which help to display the normal test instead of id or random number
-
-        return res.status(201).json(conversation?.messages);
+            participants:{$all : [senderId, receiverId]}
+        }).populate("messages"); 
+        return res.status(200).json(conversation?.messages);
     } catch (error) {
         console.log(error);
     }
