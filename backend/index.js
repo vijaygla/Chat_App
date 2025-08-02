@@ -23,7 +23,7 @@ const corsOption={
 app.use(cors(corsOption)); 
 
 
-// routes
+// api routes
 app.use("/api/v1/user",userRoute); 
 app.use("/api/v1/message",messageRoute);
  
